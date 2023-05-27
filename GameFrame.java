@@ -1,5 +1,7 @@
 package testfile;
 
+//import com.example.model.GamePlayer;  
+
 import javax.swing.*;  
 import java.awt.*;
 import java.awt.event.*;
@@ -12,23 +14,30 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Random;
+
 //import static javafx.application.Platform.exit;
 
 public class GameFrame extends JFrame{
-//    Color[] colors = {Color.white, Color.blue, Color.green, Color.yellow, Color.red};           // 这个就是测试用你后面要把它替换成贴图文件
-//    int[][] map = {{1, 2, 3, 4}, {2, 3, 4, 1}, {3, 4, 1, 2}, {4, 1, 2, 3}};                     // 这个要换成GameMap里的map
-//    int[][] rsv = {{3, 4}, {1, 2}};  // 同上
-	
+	ImageIcon img = new ImageIcon("src/ui/chessBoard.jpg");
     ImageIcon Type1_icon = new ImageIcon("src/ui/pieceType1.png");
-    Image Type1_img = Type1_icon.getImage();
-    //rsvButton type1 = new rsvButton();
-    ImageIcon Type1 = new ImageIcon(Type1_img.getScaledInstance(65,65,Image.SCALE_DEFAULT));
+    Image Type1_img_b = Type1_icon.getImage();
+    Image Type1_img_s = Type1_img_b.getScaledInstance(65,65,Image.SCALE_DEFAULT);
+    ImageIcon Type1 = new ImageIcon(Type1_img_b);
     JPanel selectedPanel = null;
+    JPanel chessboard;
     ArrayList<Point> points = new ArrayList<>();
     boolean showimage;
     public Timer timer;
+    Image temp_img = img.getImage(); 
+    static int xPosition;
+    static int yPosition;
+    static boolean click =false;
+    
+    
     public GameFrame() {
-    	this.addMouseListener(new MyMouseListener());
+    	
+    	addMouseMotionListener(new MyMouseListener());
+    	addMouseListener(new MyMouseClicker());
         setLayout(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setBounds(0,0,800,800);
@@ -43,34 +52,22 @@ public class GameFrame extends JFrame{
        // setSize(800, 800);
        // setLocationRelativeTo(null);
         JPanel mp = new JPanel(null);
-        
-        
-        
-       timer = new Timer(100,new ActionListener() {
-        	@Override
-        	public void actionPerformed(ActionEvent e)
-        	{
-        		;
-        	}
-        });
-        
- 
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+        JButton start = new JButton("Start");
+        start.setBounds(400, 500, 50, 50);
+        start.addActionListener(new Action(chessboard,this));
+        add(start);
+//        
+//       timer = new Timer(100,new ActionListener() {
+//        	@Override
+//        	public void actionPerformed(ActionEvent e)
+//        	{
+//        		;
+//        	}
+//        });
+  
         
       
-        mp.setBounds(0,0,500,500);
+        mp.setBounds(0,0,400,400);
         ImageIcon img = new ImageIcon("src/ui/chessBoard.jpg");
         Image temp_img = img.getImage();
         ImageIcon final_img = new ImageIcon(temp_img.getScaledInstance(250,250,Image.SCALE_DEFAULT));    
@@ -79,7 +76,6 @@ public class GameFrame extends JFrame{
         JButton[][] MB = new JButton[4][4];
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
-                // todo 这里要根据你的Element的Type替换成贴图
             	MB[i][j] = new JButton(); 
                 MB[i][j].setOpaque(false);
             	MB[i][j].setRolloverIcon(null);
@@ -98,7 +94,7 @@ public class GameFrame extends JFrame{
                     	((JButton)e.getSource()).setContentAreaFilled(false);
                     }
                 });     
-                 mp.add(MB[i][j]);
+                 this.add(MB[i][j]);
 //                panel.addMouseListener(new MouseAdapter() {
 //                    @Override
 //                    public void mouseClicked(MouseEvent e) {
@@ -119,67 +115,64 @@ public class GameFrame extends JFrame{
             }
         }
         mp.add(mppicture);
-        add(mp);
-    }        
-              
+       // add(mp);
+             
 
      
 
        
 
-    private void showSettleWindow() {
-        JFrame settleWindow = new JFrame();
-        settleWindow.setTitle("结算");
-        settleWindow.setSize(200, 200);
-        settleWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        settleWindow.setLocationRelativeTo(null);
+//    private void showSettleWindow() {
+//        JFrame settleWindow = new JFrame();
+//        settleWindow.setTitle("结算");
+//        settleWindow.setSize(200, 200);
+//        settleWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+//        settleWindow.setLocationRelativeTo(null);
+//
+//        JLabel textLabel;
+//        textLabel = new JLabel("你的分数是: " + 0);
+//
+//        setLayout(new FlowLayout(FlowLayout.CENTER));
+//
+//        JPanel buttonPanel = new JPanel(new GridLayout(2, 1));
+//
+//        JButton settleButton = new JButton("好的");
+//        settleButton.addActionListener(new ActionListener() {
+//            public void actionPerformed(ActionEvent e) {
+//                settleWindow.dispose();
+//                dispose();
+//                // todo 这里添加你想回到的地方或者退出程序
+//            }
+//        });
+//        buttonPanel.add(textLabel);
+//        buttonPanel.add(settleButton);
+//
+//        // 将按钮面板添加到小窗口中心
+//        settleWindow.getContentPane().setLayout(new FlowLayout(FlowLayout.CENTER));
+//        settleWindow.getContentPane().add(buttonPanel);
+//
+//        // 显示结算窗口
+//        settleWindow.setVisible(true);
+//    }
 
-        JLabel textLabel;
-        textLabel = new JLabel("你的分数是: " + 0);
-
-        setLayout(new FlowLayout(FlowLayout.CENTER));
-
-        JPanel buttonPanel = new JPanel(new GridLayout(2, 1));
-
-        JButton settleButton = new JButton("好的");
-        settleButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                settleWindow.dispose();
-                dispose();
-                // todo 这里添加你想回到的地方或者退出程序
-            }
-        });
-        buttonPanel.add(textLabel);
-        buttonPanel.add(settleButton);
-
-        // 将按钮面板添加到小窗口中心
-        settleWindow.getContentPane().setLayout(new FlowLayout(FlowLayout.CENTER));
-        settleWindow.getContentPane().add(buttonPanel);
-
-        // 显示结算窗口
-        settleWindow.setVisible(true);
-    }
-
-    
+    }   
     
     public void paint(Graphics g) {
-        //画画，监听鼠标的事件
-        Iterator iterator = points.iterator();
-        while (iterator.hasNext()){
-            Point point = (Point) iterator.next();
-            g.setColor(Color.orange);
-            g.fillOval(point.x,point.y,10,10);
-        }
+    	    super.paint(g);
+    	    g.drawImage(temp_img,0,0,null);
+            g.drawImage(Type1_img_s,xPosition-30,yPosition-30,null);
     }
-    //添加一个点到界面上
-    public void addPaint(Point point){
-        points.add(point);
-
-    }
+//    //添加一个点到界面上
+//    public void addPaint(Point point){
+//        points.add(point);
+//
+//    }
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new GameFrame().setVisible(true));
+        System.out.print("hello");
     }
 }
+
 
 //import javax.swing.*;
 //import java.awt.*;
@@ -247,22 +240,89 @@ public class GameFrame extends JFrame{
 //
 //
 //
-   class MyMouseListener extends MouseAdapter {//Adapter适配器；适配器模式；   MouseAdapter鼠标适配器
-    //鼠标的3个基本动作：按下，弹起，按住不放
-    @Override
-    public void mouseClicked(MouseEvent e) {
-    	while(true)
-    	{
-        GameFrame frame = (GameFrame) e.getSource();//作用：拿到窗口   （点击时会在界面上产生一个点）
-        //这个点就是鼠标的点
-        frame.addPaint(new Point(e.getX(),e.getY()));
-        
-        //每次点击鼠标都需要重画一遍
-        frame.repaint();//刷新
-        frame.timer.start();
-    	}
+  class MyMouseClicker extends MouseAdapter{
+	  public void mouseClicked (MouseEvent e) {
+	    	System.out.printf("成功");
+	    	GameFrame.click = !(GameFrame.click);
+	    }
   }
+
+
+
+
+
+
+
+
+   class MyMouseListener extends MouseMotionAdapter{
+    public void mouseMoved(MouseEvent e) {
+    	GameFrame.xPosition = e.getX();
+    	GameFrame.yPosition = e.getY();
+    }
 }
+   class Action implements ActionListener{
+	    JPanel _panel;
+		JFrame _frame;
+		Timer timer =new Timer(40,this);
+		public Action(JPanel p, JFrame f)
+		{
+			_panel = p;
+			_frame = f;
+		}
+	   @Override
+	   public void actionPerformed(ActionEvent e)
+	   {
+	    	System.out.print(GameFrame.click);
+		   if (GameFrame.click)
+		   {
+	    	if(GameFrame.xPosition > 0)
+	    	{
+	    		_frame.repaint();
+	    	}
+	    	else
+	    	{
+	    		//_panel.repaint();
+	    	}
+	    	timer.start();   
+	    	}
+	   }
+   }
+    
+//                 mp.add(MB[i][j]);
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+//        GameFrame frame = (GameFrame) e.getSource();//作用：拿到窗口   （点击时会在界面上产生一个点）
+//        //这个点就是鼠标的点
+//        frame.addPaint(new Point(e.getX(),e.getY()));
+//        
+//        //每次点击鼠标都需要重画一遍
+//        frame.repaint();//刷新
+//    	}
+//  }
+//}
 
 //}
 
