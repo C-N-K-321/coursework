@@ -1,7 +1,5 @@
 package testfile;
 
-//import com.example.model.GamePlayer;  
-
 import javax.swing.*;  
 import java.awt.*;
 import java.awt.event.*;
@@ -14,23 +12,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Random;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //import static javafx.application.Platform.exit;
 
 public class GameFrame extends JFrame{
