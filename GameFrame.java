@@ -9,33 +9,50 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.Random;
 
 //import static javafx.application.Platform.exit;
 
 public class GameFrame extends JFrame{
+	JButton type_1;
+	JButton type_2;
+	JButton type_3;
+	JButton type_4;
 	ImageIcon img = new ImageIcon("src/ui/chessBoard.jpg");
-    ImageIcon Type1_icon = new ImageIcon("src/ui/pieceType1.png");
-    Image Type1_img_b = Type1_icon.getImage();
-    Image Type1_img_s = Type1_img_b.getScaledInstance(65,65,Image.SCALE_DEFAULT);
-    ImageIcon Type1 = new ImageIcon(Type1_img_b);
-    JPanel selectedPanel = null;
+    ImageIcon Type1_icon_t = new ImageIcon("src/ui/pieceType1.png");
+    Image Type1_img_t = Type1_icon_t.getImage();
+    Image Type1_img = Type1_img_t.getScaledInstance(50,50,Image.SCALE_SMOOTH);
+    ImageIcon Type1_icon = new ImageIcon(Type1_img);
+    
+    ImageIcon Type2_icon_t = new ImageIcon("src/ui/pieceType2.png");
+    Image Type2_img_t = Type2_icon_t.getImage();
+    Image Type2_img = Type2_img_t.getScaledInstance(50,50,Image.SCALE_SMOOTH);
+    ImageIcon Type2_icon = new ImageIcon(Type2_img);
+    
+    ImageIcon Type3_icon_t = new ImageIcon("src/ui/pieceType3.png");
+    Image Type3_img_t = Type3_icon_t.getImage();
+    Image Type3_img = Type3_img_t.getScaledInstance(50,50,Image.SCALE_SMOOTH);
+    ImageIcon Type3_icon = new ImageIcon(Type3_img);
+    
+    
+//    ImageIcon Type1_icon_t = new ImageIcon("src/ui/pieceType1.png");
+//    Image Type1_img_t = Type1_icon_t.getImage();
+//    Image Type1_img = Type1_img_t.getScaledInstance(65,65,Image.SCALE_DEFAULT);
+//    ImageIcon Type1_icon = new ImageIcon(Type1_img_t);
+    static JButton whichButton;
     JPanel chessboard;
+    Image chessBoard_img;
     ArrayList<Point> points = new ArrayList<>();
     boolean showimage;
     public Timer timer;
-    Image temp_img = img.getImage(); 
     static int xPosition;
     static int yPosition;
     static boolean click =false;
     
     
     public GameFrame() {
-    	
+    	Action ActionListen = new Action(chessboard,this);
+    	MyButtonClicker ButtomListen = new MyButtonClicker();
     	addMouseMotionListener(new MyMouseListener());
     	addMouseListener(new MyMouseClicker());
         setLayout(null);
@@ -52,40 +69,65 @@ public class GameFrame extends JFrame{
        // setSize(800, 800);
        // setLocationRelativeTo(null);
         JPanel mp = new JPanel(null);
-        JButton start = new JButton("Start");
-        start.setBounds(400, 500, 50, 50);
-        start.addActionListener(new Action(chessboard,this));
-        add(start);
-//        
-//       timer = new Timer(100,new ActionListener() {
-//        	@Override
-//        	public void actionPerformed(ActionEvent e)
-//        	{
-//        		;
-//        	}
-//        });
-  
+        type_1 = new JButton(Type1_icon);
+        type_2 = new JButton(Type2_icon);
+        type_3 = new JButton(Type3_icon);
+//        type_4 = new JButton(Type4_icon);
+        type_1.setBounds(600,200,50,50);
+        type_1.setBackground(Color.white);
+        type_1.setOpaque(false);
+        type_1.setBorderPainted(false);
+        type_2.setBounds(600,260,50,50);
+        type_2.setBackground(Color.white);
+        type_2.setOpaque(false);
+        type_2.setBorderPainted(false);
+        type_3.setBounds(600,320,50,50);
+        type_3.setBackground(Color.white);
+        type_3.setOpaque(false);
+        type_3.setBorderPainted(false);
+//        type_4.setBounds(600,380,50,50);
+        type_1.addActionListener(ActionListen);
+        type_1.addMouseListener(ButtomListen);
+        add(type_1);
+        type_2.addActionListener(ActionListen);
+        type_2.addMouseListener(ButtomListen);
+        add(type_2);
+        type_3.addActionListener(ActionListen);
+        type_3.addMouseListener(ButtomListen);
+        add(type_3);
+//        type_4.addActionListener(new Action(chessboard,this));
+//        add(type_4);
+        
+        
+        
         
       
         mp.setBounds(0,0,400,400);
         ImageIcon img = new ImageIcon("src/ui/chessBoard.jpg");
         Image temp_img = img.getImage();
         ImageIcon final_img = new ImageIcon(temp_img.getScaledInstance(250,250,Image.SCALE_DEFAULT));    
+        chessBoard_img = final_img.getImage();
         JLabel mppicture = new JLabel(final_img);
         mppicture.setBounds(0,0,300,300);
+        //mp.add(mppicture);
+        
+        
+        
+        
         JButton[][] MB = new JButton[4][4];
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
             	MB[i][j] = new JButton(); 
+            	(MB[i][j]).setBounds(25 + j * 63, 25 + i * 62,65,65);
                 MB[i][j].setOpaque(false);
+               //mp.add(MB[i][j]);
             	MB[i][j].setRolloverIcon(null);
             	MB[i][j].setContentAreaFilled(false);
-                MB[i][j].setBorderPainted(false);
-                (MB[i][j]).setBounds(25 + j * 63, 25 + i * 62,65,65);
+                MB[i][j].setBorderPainted(false);      
                 (MB[i][j]).addActionListener(new ActionListener(){
                 	public void actionPerformed(ActionEvent e)
                 	{
-                		((JButton)e.getSource()).setIcon(Type1);
+                		((JButton)e.getSource()).setIcon(Type1_icon);
                 	}
                 });
                 (MB[i][j]).addMouseListener(new MouseAdapter() {
@@ -94,7 +136,6 @@ public class GameFrame extends JFrame{
                     	((JButton)e.getSource()).setContentAreaFilled(false);
                     }
                 });     
-                 this.add(MB[i][j]);
 //                panel.addMouseListener(new MouseAdapter() {
 //                    @Override
 //                    public void mouseClicked(MouseEvent e) {
@@ -113,54 +154,19 @@ public class GameFrame extends JFrame{
 //                });
                 
             }
-        }
-        mp.add(mppicture);
-       // add(mp);
-             
-
-     
-
-       
-
-//    private void showSettleWindow() {
-//        JFrame settleWindow = new JFrame();
-//        settleWindow.setTitle("结算");
-//        settleWindow.setSize(200, 200);
-//        settleWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-//        settleWindow.setLocationRelativeTo(null);
-//
-//        JLabel textLabel;
-//        textLabel = new JLabel("你的分数是: " + 0);
-//
-//        setLayout(new FlowLayout(FlowLayout.CENTER));
-//
-//        JPanel buttonPanel = new JPanel(new GridLayout(2, 1));
-//
-//        JButton settleButton = new JButton("好的");
-//        settleButton.addActionListener(new ActionListener() {
-//            public void actionPerformed(ActionEvent e) {
-//                settleWindow.dispose();
-//                dispose();
-//                // todo 这里添加你想回到的地方或者退出程序
-//            }
-//        });
-//        buttonPanel.add(textLabel);
-//        buttonPanel.add(settleButton);
-//
-//        // 将按钮面板添加到小窗口中心
-//        settleWindow.getContentPane().setLayout(new FlowLayout(FlowLayout.CENTER));
-//        settleWindow.getContentPane().add(buttonPanel);
-//
-//        // 显示结算窗口
-//        settleWindow.setVisible(true);
-//    }
-
-    }   
-    
+        }    
+       add(mp);
+    }
     public void paint(Graphics g) {
     	    super.paint(g);
-    	    g.drawImage(temp_img,0,0,null);
-            g.drawImage(Type1_img_s,xPosition-30,yPosition-30,null);
+    	    g.drawImage(chessBoard_img,0,0,null);
+    	    if(whichButton == type_1)
+            g.drawImage(Type1_img,xPosition-30,yPosition-30,null);
+    	    else if(whichButton == type_2)
+    	    g.drawImage(Type2_img,xPosition-30,yPosition-30,null);
+    	    else if(whichButton == type_3)
+        	g.drawImage(Type3_img,xPosition-30,yPosition-30,null);
+            
     }
 //    //添加一个点到界面上
 //    public void addPaint(Point point){
@@ -173,92 +179,30 @@ public class GameFrame extends JFrame{
     }
 }
 
-
-//import javax.swing.*;
-//import java.awt.*;
-//
-//public class ImageLabelExample {
-//    public static void main(String[] args) {
-//        JFrame frame = new JFrame("Image Label Example");
-//        frame.setSize(300, 300);
-//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//
-//        // 加载图片
-//        ImageIcon icon = new ImageIcon("image.png");
-//        // 转换为Image对象
-//        Image image = icon.getImage();
-//        // 调整图片大小
-//        image = image.getScaledInstance(100, 100, Image.SCALE_SMOOTH);
-//        // 转换为Icon对象
-//        Icon icon2 = new ImageIcon(image);
-//
-//        JLabel label = new JLabel();
-//        label.setIcon(icon2);
-//
-//        frame.getContentPane().add(label, BorderLayout.CENTER);
-//        frame.setVisible(true);
-//    }
-//}
-
-
-//class rsvButton extends JButton{
-//	Image ima;
-//    private boolean showimage;
-//	public void paintComponent(Graphics g,Image ima) {
-//	    super.paintComponent(g);
-//	    if (showimage) {
-//	        // 绘制图片
-//	        g.drawImage(ima, getX(), getY(), this);
-//	    }
-//	}
-//	public void setImage(Image ima)
-//	{
-//		this.ima = ima;
-//	}
-//	public void setshowimage(boolean b)
-//	{
-//		this.showimage = b;
-//	}
-//
-//}
-
-
-//public MyFrame(String title)  {
-//    super(title);
-//    setBounds(200,200,400,400);
-//
-//    //存鼠标点击的点
-//    
-//
-//    //鼠标监听器
-//   c
-//
-//    setVisible(true);
-//}
-//
-//@Override
-//
-//
-//
   class MyMouseClicker extends MouseAdapter{
 	  public void mouseClicked (MouseEvent e) {
 	    	System.out.printf("成功");
 	    	GameFrame.click = !(GameFrame.click);
 	    }
   }
-
-
-
-
-
-
-
-
+  class MyButtonClicker extends MouseAdapter{
+	  public void mouseClicked (MouseEvent e) {
+		  GameFrame.whichButton = (JButton)e.getSource();
+		  System.out.print(GameFrame.whichButton);
+	    }
+  }
    class MyMouseListener extends MouseMotionAdapter{
     public void mouseMoved(MouseEvent e) {
+    	if(GameFrame.click = true)
+    	{
     	GameFrame.xPosition = e.getX();
     	GameFrame.yPosition = e.getY();
+    	}
     }
+//    public void mouseExited(MouseEvent e)
+//    {
+//    	GameFrame.click = false;
+//    }
 }
    class Action implements ActionListener{
 	    JPanel _panel;
@@ -287,9 +231,14 @@ public class GameFrame extends JFrame{
 	    	}
 	   }
    }
-    
-//                 mp.add(MB[i][j]);
-    	
+//////////////////////////////////////////////////////////////////////
+   class chessBoard extends JPanel
+   {
+	   public chessBoard()
+	   {
+		  // this.add
+	   }
+   }
     	
     	
     	
