@@ -22,23 +22,20 @@ public class GameFrame extends JFrame{
 	static ImageIcon img = new ImageIcon("src/ui/chessBoard.jpg");
 	static ImageIcon Type1_icon_t = new ImageIcon("src/ui/pieceType1.png");
     static Image Type1_img_t = Type1_icon_t.getImage();
-    static Image Type1_img = Type1_img_t.getScaledInstance(50,50,Image.SCALE_SMOOTH);
+    static Image Type1_img = Type1_img_t.getScaledInstance(130,130,Image.SCALE_SMOOTH);
     static ImageIcon Type1_icon = new ImageIcon(Type1_img);
     
     static ImageIcon Type2_icon_t = new ImageIcon("src/ui/pieceType2.png");
     static Image Type2_img_t = Type2_icon_t.getImage();
-    static Image Type2_img = Type2_img_t.getScaledInstance(50,50,Image.SCALE_SMOOTH);
+    static Image Type2_img = Type2_img_t.getScaledInstance(120,120,Image.SCALE_SMOOTH);
     static ImageIcon Type2_icon = new ImageIcon(Type2_img);
     
     static ImageIcon Type3_icon_t = new ImageIcon("src/ui/pieceType3.png");
     static Image Type3_img_t = Type3_icon_t.getImage();
-    static Image Type3_img = Type3_img_t.getScaledInstance(50,50,Image.SCALE_SMOOTH);
+    static Image Type3_img = Type3_img_t.getScaledInstance(120,120,Image.SCALE_SMOOTH);
     static ImageIcon Type3_icon = new ImageIcon(Type3_img);
     static JButton whichButton;
-    JPanel chessboard;
     static Image chessBoard_img;
-    ArrayList<Point> points = new ArrayList<>();
-    boolean showimage;
     static boolean put = false;
     static int xPosition;
     static int yPosition;
@@ -50,7 +47,6 @@ public class GameFrame extends JFrame{
     chessBoard Board = new chessBoard();
     GameMap map;
     JLabel[][] Label_map = new JLabel[4][4];
-    
     
     class MyButtonClicker extends MouseAdapter implements ActionListener{
   	  JLabel ttyy;
@@ -95,7 +91,7 @@ public class GameFrame extends JFrame{
   		  select = false;
   		  }
   	    //  if(ttyy!=null)
-  		  ttyy.setBounds(GameFrame.xPosition,GameFrame.yPosition,50,50);
+  		  ttyy.setBounds(GameFrame.xPosition - 60,GameFrame.yPosition-60,130,130);
   		  f.setVisible(true);
   		  f.revalidate();
   		  f.repaint();
@@ -114,15 +110,13 @@ public class GameFrame extends JFrame{
         public void mouseMoved(MouseEvent e) {
         	{
         	GameFrame.xPosition = e.getX();
-        	x = (int)(GameFrame.xPosition / 62.5);
+        	x = (int)((GameFrame.xPosition-20)/150);
         	GameFrame.yPosition = e.getY();
-        	y = (int)(GameFrame.yPosition / 62.5);
+        	y = (int)((GameFrame.yPosition-50)/150);
         	}
         }
     }
-    
-    
-    
+
     class MyMouseClicker extends MouseAdapter{
  	   GameMap map;
  	   GameFrame _frame;
@@ -154,40 +148,35 @@ public class GameFrame extends JFrame{
  			   }
  	  }
     }
-    
-    
-    
-    
-    
-    
+
     
     public GameFrame(GameMap map) {
      	this.map = map;
-    	Board.setBounds(0, 0, 800, 800);
+    	Board.setBounds(0,0,800,800);
     	Board.addMouseMotionListener(new MyMouseListener());
     	Board.addMouseListener(new MyMouseClicker(this,map));
     	Board.setLayout(null);
     	Board.setOpaque(false);
+    	
     	add(Board);
         setLayout(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setBounds(0,0,800,800);
         JLabel TRY = new JLabel(Type1_icon);
-        TRY.setBounds(50, 50, 100, 100);
         mp.setLayout(null);
         
         type_1 = new JButton(Type1_icon);
         type_2 = new JButton(Type2_icon);
         type_3 = new JButton(Type3_icon);
-        type_1.setBounds(600,200,40,40);
+        type_1.setBounds(600,120,100,100);
         type_1.setBackground(Color.white);
         type_1.setOpaque(false);
         type_1.setBorderPainted(false);
-        type_2.setBounds(600,260,40,40);
+        type_2.setBounds(600,280,100,100);
         type_2.setBackground(Color.white);
         type_2.setOpaque(false);
         type_2.setBorderPainted(false);
-        type_3.setBounds(600,320,40,40);
+        type_3.setBounds(600,440,100,100);
         type_3.setBackground(Color.white);
         type_3.setOpaque(false);
         type_3.setBorderPainted(false);
@@ -204,10 +193,10 @@ public class GameFrame extends JFrame{
         mp.setBounds(0,0,400,400);
         ImageIcon img = new ImageIcon("src/ui/chessBoard.jpg");
         Image temp_img = img.getImage();
-        ImageIcon final_img = new ImageIcon(temp_img.getScaledInstance(200,200,Image.SCALE_DEFAULT));    
+        ImageIcon final_img = new ImageIcon(temp_img.getScaledInstance(600,600,Image.SCALE_DEFAULT));    
         chessBoard_img = final_img.getImage();
         JLabel mppicture = new JLabel(final_img);
-         mppicture.setBounds(0,0,600,600);        
+         mppicture.setBounds(0,50,600,600);        
        //add(mp);
         add(mppicture);
     }
@@ -217,6 +206,7 @@ public class GameFrame extends JFrame{
         System.out.print("hello");
         GameMap gamemap = new GameMap();
         GameFrame a = new GameFrame(gamemap);
+        a.setLocationRelativeTo(null);
         a.setVisible(true);
         
     }
